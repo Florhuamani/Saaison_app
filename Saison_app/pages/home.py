@@ -1,30 +1,37 @@
 import reflex as rx
-from Saison_app import State 
+from Saison_app import State
 
-def home_page() -> rx.Component:
-    """Página principal que muestra productos."""
+
+def handle_add_to_cart(producto):
+    """Manejador para agregar al carrito."""
+    return State().agregar_al_carrito(producto)
+
+
+def home_page():
+    """Página principal de productos."""
     productos = [
-        {"nombre": "Disfraz de vampiro", "precio":"s/.20", "imagen": ""},
-        {"nombre": "Calabaza decorativa", "precio":"s/.25", "imagen": ""},
-                ]
-    return rx.box(
-        rx.heading("Productos de Temporada", size="1"),
-        rx.grid([
-            rx.box(
-                rx.image(src=producto[""],
-                         alt=producto[""],),
-                         rx.text(producto[""]),
-                         rx.text(producto[""]),
+        {"nombre": "Disfraz de Vampiro", "precio": "$20", "imagen": "resources/vampiro.jpg"},
+        {"nombre": "Calabaza Decorativa", "precio": "$10", "imagen": "resources/calabaza.jpg"},
+        {"nombre": "Sombrero de Bruja", "precio": "$15", "imagen": "resources/sombrero.jpg"},
+    ]
 
-                         rx.button("Agregar al carrito",
-                                   on_click=lambda p=producto:
-                                   State.agregar_al_carrito(p),
-                ),
+    return rx.box(
+        rx.heading("Productos de Temporada", size="xl"),
+        rx.grid(
+            [
+                rx.box(
+                    rx.image(src=producto["imagen"], alt=producto["nombre"]),
+                    rx.text(producto["nombre"]),
+                    rx.text(producto["precio"]),
+                    rx.button(
+                        "Agregar al Carrito",
+                        on_click=lambda p=producto: handle_add_to_cart(p),
                     ),
-                    for producto in productos
-                ],
-                template_columns="repeat(3,1fr)",
-                gap=4,
+                )
+                for producto in productos
+            ],
+            template_columns="repeat(3, 1fr)",
+            gap=4,
         ),
-        pading="5",
+        padding="5",
     )

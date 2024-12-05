@@ -1,39 +1,33 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
-
 import reflex as rx
-
-from rxconfig import config
 
 
 class State(rx.State):
-    """The app state."""
+    """Estado global de la aplicación."""
+    usuario_actual: str = ""
+    carrito: list[dict] = []
 
-    ...
+    def iniciar_sesion(self, email: str):
+        """Inicia sesión del usuario."""
+        self.usuario_actual = email
+        return rx.redirect("/home")
 
+    def agregar_al_carrito(self, producto: dict):
+        """Agrega un producto al carrito."""
+        self.carrito.append(producto)
 
-def index() -> rx.Component:
-    # Welcome Page (Index)
-    return rx.container(
-        rx.color_mode.button(position="top-right"),
-        rx.vstack(
-            rx.heading("Welcome to Reflex!", size="9"),
-            rx.text(
-                "Get started by editing ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
-            ),
-            rx.link(
-                rx.button("Check out our docs!"),
-                href="https://reflex.dev/docs/getting-started/introduction/",
-                is_external=True,
-            ),
-            spacing="5",
-            justify="center",
-            min_height="85vh",
-        ),
-        rx.logo(),
-    )
+    def eliminar_del_carrito(self, producto: dict):
+        """Elimina un producto del carrito."""
+        self.carrito.remove(producto)
 
 
-app = rx.App()
-app.add_page(index)
+# Importar las páginas
+from .pages.inicio import login_page
+from .pages.home import home_page
+from .pages.cart import cart_page
+
+# Configurar la aplicación
+app = rx.App(state=State)
+app.add_page(login_page, route="/", title="Iniciar Sesión")
+app.add_page(home_page, route="/home", title="Productos de Temporada")
+app.add_page(cart_page, route="/cart", title="Carrito de Compras")
+app.compile()

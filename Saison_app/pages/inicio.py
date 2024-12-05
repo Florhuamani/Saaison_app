@@ -1,25 +1,26 @@
 import reflex as rx
 from Saison_app import State
 
-def inicio() -> rx.Component:
-    "Página de inicio de sesión"
+
+def login_page():
+    """Manejador para el botón de iniciar sesión."""
+    email = rx.get("email")
+    return State().iniciar_sesion(email)
+
+
+def login_page():
+    """Página de inicio de sesión."""
     return rx.center(
         rx.vstack(
-            rx.heading("Iniciar sesión",size="2x1"),
-            rx.input(
-                placeholder="Correo electrónico", on_change=lambda
-                value : setattr(State,"email", value),
-                ),
-                rx.input(
-                    placeholder="Contraseña",
-                    type="Password", on_change=lambda 
-                    value:setattr(State,"password",value),
-                ),
-                rx.button("Iniciar Sesión",
-                          on_click=State.inicio,
-                          color_scheme="blue",
-                          ),
-                          spacing="4",
+            rx.heading("Iniciar Sesión", size="xl"),
+            rx.input(placeholder="Correo Electrónico", id="email"),
+            rx.button(
+                "Ingresar",
+                color="white",
+                bg="beige",
+                on_click=login_page,
+            ),
+            spacing=4,
         ),
         min_height="100vh",
     )
